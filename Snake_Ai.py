@@ -102,6 +102,8 @@ class Snake :
                 Snake.Draw_Piece(Pos3 , Pos1 , None , Body_Padding , Color) 
 
     def Draw(self , scr , Color : tuple = SNK_CLR):
+        
+
         if len(self.Pos) == 1 :
             for i in self.Pos :
                 left = i[0] * Grid_Tam + self.Body_Padding

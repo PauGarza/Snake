@@ -1,6 +1,6 @@
 import random
 
-#Directions :
+#Direcciones:
 
 UP = ( 0 , 1 )
 DOWN = ( 0 , -1 )
@@ -9,50 +9,49 @@ LEFT = ( -1 , 0 )
 
 ALL_DIR = ( UP , DOWN , RIGHT , LEFT )
 
-HORZ = [RIGHT , LEFT] # Horizontal Directions
-VER = [UP , DOWN] # Vertical Directions
+HORZ = [RIGHT , LEFT] # Direcciones horizontales
+VER = [UP , DOWN] # Direcciones verticales
 
 class Node :
-    BlockingDirections = [] # the Directions we can't reach
+    BlockingDireccions = [] # las direcciones que no podemos alcanzar
 
     Visited : bool = False
 
     def __init__(self) -> None:
         self.Visited = False
-        self.BlockingDirections = []
+        self.BlockingDireccions = []
 
 def CalculateSimpleDistance(P1 : tuple[int , int] , P2 : tuple[int,int]) : 
     return abs(P1[0] - P2[0]) + abs(P1[1] - P2[1])
 
-def MovePoint(Point : tuple[int,int] , Dir : tuple[int, int]) : 
+def Mover(Point : tuple[int,int] , Dir : tuple[int, int]) : 
     return (Point[0] + Dir[0] , Point[1] - Dir[1])
 
 def Compare(l) : 
     return l[1]
 
-def AStarPathFinding(Map : list , Start : int, Target : int , limit : int = None) : 
+def AStarPathFinding(Map : list , Inicio : int, Target : int , limit : int = None) : 
     Vertices = [[None , None , None , None]] * len(Map) 
-    #[Distance From the beginning , Distance to the Target , the Direction we came from , the index of the vertex we came from]
-    
+    #[Distancia desde el principio, distancia al objetivo, la dirección de la que venimos, el índice del vértice del que venimos]
     l = 0
     
     path = []
 
-    v = [(Map[Start],0)]
+    v = [(Map[Inicio],0)]
 
-    Vertices[Start] = [0 , 0 , None , None]
+    Vertices[Inicio] = [0 , 0 , None , None]
 
-    Trg = Map[Target] # the target coordinates
+    Trg = Map[Target] # Las coordenadas objetivo
     while len(v) > 0 :
         if limit != None :
             l += 1
             if l >= limit :
-                raise Exception("Limit Overflow")
-        cv = v.pop(0) # Current vertex
+                raise Exception("Overflow")
+        cv = v.pop(0) # Vértice actual
         cindex = Map.index(cv[0])
         if cindex != Target : 
             for dir in ALL_DIR :
-                NP = MovePoint(cv[0] , dir)
+                NP = Mover(cv[0] , dir)
                 if NP in Map :
                     index = Map.index(NP)
                     Dis1 = Vertices[cindex][0] + CalculateSimpleDistance(NP,cv[0])
@@ -64,11 +63,11 @@ def AStarPathFinding(Map : list , Start : int, Target : int , limit : int = None
             v.sort(key=Compare)
         else :
             break
-    if Vertices[Target][0] == None : # we didn't find a solution
-        raise Exception("No such path found to the Target")
+    if Vertices[Target][0] == None : # No encontramos una solución
+        raise Exception("No se encontró tal camino al objetivo")
     else : 
-        cv = Vertices[Target] # Current vertex
-        while cv != Vertices[Start] : 
+        cv = Vertices[Target] # Vértice actual
+        while cv != Vertices[Inicio] : 
             path.append(cv[2])
             cv = Vertices[cv[3]]
         
@@ -76,21 +75,21 @@ def AStarPathFinding(Map : list , Start : int, Target : int , limit : int = None
         return path
  
 def GenerateEmptiesMap(snk , apl , Gx : int , Gy : int , ExceptHead = False , Exceptapl = False) :
-    """Returns all the empty points coordinates in a snake game : Points that doesn't include the Snake's body (Optionaly the apple) \n
-    :parameter : \n
-    SNK : The Snake's Body \n
-    APPLE : The APPLE or its position \n
-    Remove : Positions to Remove from the Map \n\n
+    """Devuelve todas las coordenadas de puntos vacíos en un juego de serpiente: puntos que no incluyen el cuerpo de la serpiente (opcionalmente la manzana) \ n
+    : parámetro: \ n
+    SNK: el cuerpo de la serpiente \ n
+    Apple: la manzana o su posición \ n
+    Eliminar: posiciones para eliminar del mapa \ n \ n
 
-    ExceptHead : set it to True if you want to consider the head's position as Empty\n\n
+    ExcepThead: configúrelo en verdadero si desea considerar la posición de la cabeza como vacía \ n \ n
 
-    GX : the Map's Width \n
-    GY : The Map's Height
+    Gx: el ancho del mapa \ n
+    Gy: la altura del mapa
     """
 
-    SPOS = snk.Pos if not ExceptHead else snk.Pos[1:len(snk)]#Snake body Positions
+    SPOS = snk.Pos if not ExceptHead else snk.Pos[1:len(snk)]#Posiciones del cuerpo de Snake
 
-    APOS = apl.Pos#Apple Position
+    APOS = apl.Pos#manzanaPosition
 
     toreturn = []
     for y in range(Gy) :
@@ -103,11 +102,11 @@ def GenerateEmptiesMap(snk , apl , Gx : int , Gy : int , ExceptHead = False , Ex
 
 def GenerateMap(Gx : int, Gy : int , reverse : bool = False) :
 
-    """Generates a List of all the Map's Positions
-        Gx : the Width of the Map
-        Gy : the Height of the Map
-        reverse : usually the Map will be generated starting from the left up corner going down
-                    reversing means we will start at the same position going to the right
+    """Genera una lista de todas las posiciones del mapa
+        GX: El ancho del mapa
+        Gy: la altura del mapa
+        Reversa: generalmente el mapa se generará a partir de la esquina izquierda hacia abajo.
+                    Reversar significa que comenzaremos en la misma posición yendo a la derecha
     """
 
     toreturn = []
@@ -126,10 +125,10 @@ def GenerateMapGraph(Mp : list) :
     Graph = [None] * len(Mp)
 
     for i in range(len(Mp)) :
-        Point = Mp[i] # the point of the index i on the map
+        Point = Mp[i] # el punto del índice I en el mapa
         
         for dir in ALL_DIR :
-            NP = (Point[0] + dir[0] , Point[1] - dir[1]) # the new point if we follow that direction
+            NP = (Point[0] + dir[0] , Point[1] - dir[1]) # El nuevo punto si seguimos esa dirección
             
             if NP in Mp :
                 if Graph[i] == None :
@@ -139,19 +138,19 @@ def GenerateMapGraph(Mp : list) :
             
     return Graph
 
-def PrimsAlgorithm(G : list , Start : int) :
+def PrimsAlgorithm(G : list , Inicio : int) :
     
-    visited = [Start]
+    visited = [Inicio]
 
-    sol = [None] * len(G) # the Solution
+    sol = [None] * len(G) # la solución
 
     while len(visited) < len(G) :
-        SmallestDis = None # the smallest distance (the smallest edge length / weight)
+        SmallestDis = None # la distancia más pequeña (la longitud / peso del borde más pequeña)
         ver = None
         ver2 = None
 
-        rv = [] #vertices list to choose from randomly when finding two edges with the same length 
-        re = [] #edges list to choose from randomly when finding two edges with the same length
+        rv = [] #Lista de vértices para elegir entre al azar al encontrar dos bordes con la misma longitud
+        re = [] #Lista de bordes para elegir entre al azar al encontrar dos bordes con la misma longitud
 
         for v in visited : 
             for edge in G[v] :
@@ -165,7 +164,7 @@ def PrimsAlgorithm(G : list , Start : int) :
                     rv.append(v)
                     re.append(edge)
                 elif edge[0] in visited : 
-                    G[v].remove(edge) # removing the edge so we dont search it again (for improving the efficiency)
+                    G[v].remove(edge) # Eliminar el borde para que no lo busquemos nuevamente (para mejorar la eficiencia)
 
         if len(rv) > 0 :
             i = random.randint(0,len(rv)-1)
@@ -175,7 +174,7 @@ def PrimsAlgorithm(G : list , Start : int) :
  
         G[ver].remove([ver2 , SmallestDis])
         G[ver2].remove([ver , SmallestDis])
-        # removing the edges so we dont search them again (for improving the efficiency)
+        # Eliminar los bordes para que no los busquemos nuevamente (para mejorar la eficiencia)
         
         if sol[ver] == None :
             sol[ver] = []
@@ -196,16 +195,16 @@ def GenerateHamiltonianMaze(Graph : list , Map : list , Gx : int, Gy : int) -> l
 
     for i in range(len(Graph)):
         if Graph[i] != None :
-            vx , vy = Map[i] # the vertex's x and y coordinates
+            vx , vy = Map[i] # Las coordenadas X e Y del vértice
 
             for edge in Graph[i] :
 
-                nvx = vx * 2 + 1 # the projected x coordinate
-                nvy = vy * 2 + 1 # the projected y coordinate
+                nvx = vx * 2 + 1 # la coordenada X proyectada
+                nvy = vy * 2 + 1 # la coordenada y proyectada
 
-                vx2 , vy2 = Map[edge[0]] # the vertex's coordinates which is adjacent to Graph[i] vertex
+                vx2 , vy2 = Map[edge[0]] # las coordenadas del vértice que está adyacente al gráfico [i] vértice
 
-                Dir = (vx2 - vx , vy - vy2) #the Direction From the Vertex1 to it's adjacent (Vertex2)
+                Dir = (vx2 - vx , vy - vy2) #La dirección del vértice a su adyacente (vértice2)
                 
                 nvx2 = vx2 * 2 + 1
                 nvy2 = vy2 * 2 + 1
@@ -217,15 +216,15 @@ def GenerateHamiltonianMaze(Graph : list , Map : list , Gx : int, Gy : int) -> l
 
                 for j in range(2) :
                     if Dir in HORZ :
-                        Maze[Gx * nvy + nvx].BlockingDirections.append(UP)
-                        Maze[Gx * (nvy-1) + nvx].BlockingDirections.append(DOWN)
-                        #Blocking the way in both sides
+                        Maze[Gx * nvy + nvx].BlockingDireccions.append(UP)
+                        Maze[Gx * (nvy-1) + nvx].BlockingDireccions.append(DOWN)
+                        #Bloqueando el camino en ambos lados
 
                         nvx += Dir[0]
                     else :
-                        Maze[Gx * nvy + nvx].BlockingDirections.append(LEFT)
-                        Maze[Gx * nvy + nvx - 1].BlockingDirections.append(RIGHT)
-                        #Blocking the way in both sides
+                        Maze[Gx * nvy + nvx].BlockingDireccions.append(LEFT)
+                        Maze[Gx * nvy + nvx - 1].BlockingDireccions.append(RIGHT)
+                        #Bloqueando el camino en ambos lados
 
                         nvy -= Dir[1]
         
@@ -237,22 +236,22 @@ def InsideBorders(x : int , y : int , Gx : int, Gy : int) :
     return x < Gx and x >= 0 and y < Gy and y >= 0 
 
 def Maze2Cycle(Maze : list[Node] , Gx : int, Gy : int) : 
-    P = (0,0) # Current Position
-    dir = (1,0) # the direction we're going
-    right = (0,-1) # our right direction relative to our facing direction
-    # think about it like your Right Hand
-    # if you are facing the north your right hand direction is the east
-    # but if you are facing the south your right hand direction is the west 
+    P = (0,0) # Posición actual
+    dir = (1,0) # la dirección que vamos
+    right = (0,-1) # Nuestra dirección correcta en relación con nuestra dirección orientada
+    # Piénselo como tu mano derecha
+    # Si se encuentra frente al norte, su dirección de la derecha es el este
+    # Pero si estás mirando al sur, tu dirección derecha es Occidente
 
     l = Gx * Gy
 
-    sol = [P]# the solution we've found
+    sol = [P]# la solución que hemos encontrado
 
-    path = []#the path of the hamiltonian cycle to follow
+    path = []#el camino del ciclo hamiltoniano a seguir
 
     for N in range(l) :
         x , y = P
-        if dir not in  Maze[y * Gx  + x].BlockingDirections and InsideBorders(x + dir[0] , y - dir[1] , Gx , Gy)  : # our direction is not blocked
+        if dir not in  Maze[y * Gx  + x].BlockingDireccions and InsideBorders(x + dir[0] , y - dir[1] , Gx , Gy)  : # Nuestra dirección no está bloqueada
             Maze[y * Gx  + x].Visited = True
 
             x += dir[0]
@@ -262,32 +261,32 @@ def Maze2Cycle(Maze : list[Node] , Gx : int, Gy : int) :
             sol.append(P)
             path.append(dir)
         else :
-            # we will search a Non Blocked Direction that doesn't lead to a Visited Node
+            # Buscaremos una dirección no bloqueada que no conduzca a un nodo visitado
             for d in ALL_DIR :
                 nx = x + d[0]
                 ny = y - d[1]
                 NP = (nx,ny)
                 
-                if d not in Maze[y * Gx + x].BlockingDirections and InsideBorders(nx , ny , Gx , Gy) and not Maze[ny * Gx  + nx].Visited :
+                if d not in Maze[y * Gx + x].BlockingDireccions and InsideBorders(nx , ny , Gx , Gy) and not Maze[ny * Gx  + nx].Visited :
                     Maze[y * Gx + x].Visited = True
                     P = NP
                     dir = d
 
-                    if dir in HORZ : # our direction is Horizontal
+                    if dir in HORZ : # Nuestra dirección es horizontal
                         right = (0,-dir[0])
-                    else : # our direction is Vertical 
+                    else : # Nuestra dirección es vertical
                         right = (dir[1],0)
                     
                     sol.append(P)
                     path.append(dir)
                     break
-        if right not in Maze[y * Gx  + x].BlockingDirections and InsideBorders(x + right[0] , y - right[1] , Gx , Gy) : # we can go right 
+        if right not in Maze[y * Gx  + x].BlockingDireccions and InsideBorders(x + right[0] , y - right[1] , Gx , Gy) : # Podemos ir derecha
             dir = right 
             
-            if dir in HORZ : # our direction is Horizontal
+            if dir in HORZ : # Nuestra dirección es horizontal
                 right = (0,-dir[0])
-            else : # our direction is Vertical
+            else : # Nuestra dirección es vertical
                 right = (dir[1],0)
-            # rotating our direction to the right         
+            # girando nuestra dirección hacia la derecha        
 
     return sol , path

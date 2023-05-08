@@ -6,27 +6,27 @@ import Map
 
 import pygame.time
 
-#   Screen and Grid Size :
-size = w , h = 400,400
+#   Pantalla y Grid Tam :
+tamaño = w , h = 400,400
 
-Grid_Size = 40
+Grid_Tam = 40
 
-GX = w // Grid_Size
-GY = h // Grid_Size
-### GX and GY must be two even numbers
+GX = w // Grid_Tam
+GY = h // Grid_Tam
+### gx y gy deben ser dos números pares
 
-LEN = GX * GY # the length of the map (number of possible positions)
+LEN = GX * GY # la longitud del mapa (número de posiciones posibles)
 
-#    Main Colors :
+#    Colores principales:
 
 BCKG_Color = (69, 76, 87)
 
-Apple_CLR = (255,0,0)
+Manzana_CLR = (255,0,0)
 SNK_CLR = (190,190,190)
 
 TXT_CLR = (4, 196, 39)
 
-#    Snake Directions :
+#    Instrucciones de serpiente:
 
 UP = ( 0 , 1 )
 DOWN = ( 0 , -1 )
@@ -35,26 +35,26 @@ LEFT = ( -1 , 0 )
 
 ALL_DIR = ( UP , DOWN , RIGHT , LEFT )
 
-HORZ = [RIGHT , LEFT] # Horizontal Directions
-VER = [UP , DOWN] # Vertical Directions
+HORZ = [RIGHT , LEFT] # Direcciones horizontales
+VER = [UP , DOWN] # Vertical Direccions
 
 class Snake :
     Length = 1
     Pos = []
-    Direction = UP #Direction
+    Direccion = UP #Direccion
     Dead = False
-    LastTailPos = None # the Last Tail Position before movement
-    # Used to expand the snake in the right direction
+    ColaPos = None # El último puesto de cola antes del movimiento
+    # Se usa para expandir la serpiente en la dirección correcta
     
-    LastTailDir = None # the last direction that the tail took
+    ColaDir = None # la última dirección que tomó la cola
 
-    Body_Padding = 2 # represents the padding we do when we draw the snake's body
+    Body_Padding = 2 # representa el relleno que hacemos cuando dibujamos el cuerpo de la serpiente
 
-    def __init__(self , Pos =  [ (GX // 2 , GY // 2)], Direction = random.choice(ALL_DIR) , Body_Padding = 2):
+    def __init__(self , Pos =  [ (GX // 2 , GY // 2)], Direccion = random.choice(ALL_DIR) , Body_Padding = 2):
         self.Length = 1
         self.Pos = Pos
         self.Length = len(Pos)
-        self.Direction = Direction 
+        self.Direccion = Direccion 
         self.Body_Padding = Body_Padding
 
     def __len__(self):
@@ -65,28 +65,28 @@ class Snake :
 
         DirX = Pos1[0] - Pos2[0]
         DirY = Pos1[1] - Pos2[1]
-        Dir = (DirX , DirY) # the Piece's Direction
+        Dir = (DirX , DirY) #direcion nueva
         
-        if Dir == (1 , 0) : # Right
-            left = Pos1[0] * Grid_Size - Body_Padding
-            top = Pos1[1] * Grid_Size + Body_Padding
+        if Dir == (1 , 0) : # Derecha
+            left = Pos1[0] * Grid_Tam - Body_Padding
+            top = Pos1[1] * Grid_Tam + Body_Padding
 
-            pgm.draw.rect(scr,Color,pgm.Rect(left , top , Grid_Size , Grid_Size - 2 * Body_Padding))
-        elif Dir == (-1 , 0) : # Left 
-            left = Pos1[0] * Grid_Size + Body_Padding
-            top = Pos1[1] * Grid_Size + Body_Padding
+            pgm.draw.rect(scr,Color,pgm.Rect(left , top , Grid_Tam , Grid_Tam - 2 * Body_Padding))
+        elif Dir == (-1 , 0) : # Izquierda 
+            left = Pos1[0] * Grid_Tam + Body_Padding
+            top = Pos1[1] * Grid_Tam + Body_Padding
 
-            pgm.draw.rect(scr,Color,pgm.Rect(left , top , Grid_Size , Grid_Size - 2 * Body_Padding))
-        elif Dir == (0 , -1) : # Up
-            left = Pos1[0] * Grid_Size + Body_Padding
-            top = Pos1[1] * Grid_Size + Body_Padding
+            pgm.draw.rect(scr,Color,pgm.Rect(left , top , Grid_Tam , Grid_Tam - 2 * Body_Padding))
+        elif Dir == (0 , -1) : # Arriba
+            left = Pos1[0] * Grid_Tam + Body_Padding
+            top = Pos1[1] * Grid_Tam + Body_Padding
 
-            pgm.draw.rect(scr,Color,pgm.Rect(left , top , Grid_Size - 2 * Body_Padding , Grid_Size))
-        elif Dir == (0 , 1) : # Down 
-            left = Pos1[0] * Grid_Size + Body_Padding
-            top = Pos1[1] * Grid_Size - Body_Padding
+            pgm.draw.rect(scr,Color,pgm.Rect(left , top , Grid_Tam - 2 * Body_Padding , Grid_Tam))
+        elif Dir == (0 , 1) : # Abajo 
+            left = Pos1[0] * Grid_Tam + Body_Padding
+            top = Pos1[1] * Grid_Tam - Body_Padding
 
-            pgm.draw.rect(scr,Color,pgm.Rect(left , top , Grid_Size - 2 * Body_Padding , Grid_Size)) 
+            pgm.draw.rect(scr,Color,pgm.Rect(left , top , Grid_Tam - 2 * Body_Padding , Grid_Tam)) 
 
         if Pos3 != None : 
             DrawPos3 = True
@@ -95,7 +95,7 @@ class Snake :
             NDirY = Pos3[1] - Pos1[1]
             NDir = (NDirX , NDirY)
 
-            if NDir == Dir : # if the Pieces have the same direction
+            if NDir == Dir : # Si las piezas tienen la misma dirección
                 DrawPos3 = False
 
             if DrawPos3 :
@@ -104,12 +104,12 @@ class Snake :
     def Draw(self , scr , Color : tuple = SNK_CLR):
         if len(self.Pos) == 1 :
             for i in self.Pos :
-                left = i[0] * Grid_Size + self.Body_Padding
-                top = i[1] * Grid_Size + self.Body_Padding
+                left = i[0] * Grid_Tam + self.Body_Padding
+                top = i[1] * Grid_Tam + self.Body_Padding
 
-                pgm.draw.rect(scr,Color,pgm.Rect(left , top , Grid_Size - 2 * self.Body_Padding , Grid_Size - 2 * self.Body_Padding))
+                pgm.draw.rect(scr,Color,pgm.Rect(left , top , Grid_Tam - 2 * self.Body_Padding , Grid_Tam - 2 * self.Body_Padding))
         else :
-            for i in range(len(self.Pos) - 1) : # Drawing every piece but the tail
+            for i in range(len(self.Pos) - 1) : # Dibujando cada pieza excepto la cola
                 Snake.Draw_Piece(self.Pos[i] , self.Pos[i + 1] , None if i == 0 else self.Pos[i - 1] ,  self.Body_Padding , Color)
 
             Snake.Draw_Piece(self.Pos[self.Length - 1] , self.Pos[self.Length - 2] , None , self.Body_Padding , Color) # drawing the tail
@@ -117,42 +117,42 @@ class Snake :
     def Move(self ,reverse = False , DontEditLT : bool = False):
         head = self.Pos[0]
         if reverse :
-            p = (head[0] - self.Direction[0] , head[1] + self.Direction[1])
+            p = (head[0] - self.Direccion[0] , head[1] + self.Direccion[1])
         else :
-            p = (head[0] + self.Direction[0] , head[1] - self.Direction[1])
+            p = (head[0] + self.Direccion[0] , head[1] - self.Direccion[1])
         self.Pos.insert(0, p )
         if not DontEditLT :
-            self.LastTailPos = self.Pos.pop(len(self.Pos) - 1)
+            self.ColaPos = self.Pos.pop(len(self.Pos) - 1)
             tail = self.Pos[len(self) - 1]
-            self.LastTailDir = (tail[0] - self.LastTailPos[0] , self.LastTailPos[1] - tail[1])
+            self.ColaDir = (tail[0] - self.ColaPos[0] , self.ColaPos[1] - tail[1])
         else : 
             self.Pos.pop()
-    def Change_Direction(self , Dir):
+    def Change_Direccion(self , Dir):
         Dir = tuple(Dir)
-        self.Direction = Dir
+        self.Direccion = Dir
 
     def Append(self):
-        self.Pos.append(self.LastTailPos)
+        self.Pos.append(self.ColaPos)
         self.Length += 1
 
-    def see_if_dead(self):
+    def ver_si_dead(self):
 
-        """Returns true if the Snake is in a death position """
+        "" "Devuelve verdadero si la serpiente está en una posición de muerte" ""
 
         head = self.Pos[0]
 
-        HX = head[0] # Head X's coordinate
+        HX = head[0] # Coordenada de cabeza x
 
-        HY = head[1] # Head Y's coordinate
+        HY = head[1] # Coordinada de Head Y
 
         if HX < 0 or HX >= GX or HY < 0 or HY >= GY or head in self.Pos[1:] :
             return True
 
-class Apple :
+class Manzana :
 
     Pos = (0,0)
 
-    scr = None # screen || surface to draw the apple on
+    scr = None # pantalla ||superficie para dibujar la manzana
 
     def __init__(self , scr , SNK : Snake , Pos : tuple = None):
         self.scr = scr
@@ -168,37 +168,37 @@ class Apple :
                 self.Respawn(snk)
     def Respawn(self , snk : Snake | tuple[int]) :
 
-        """Respawns the apple (used if the apple has been eaten)"""
+        """Respawn la manzana (se usa si se ha comido la manzana)"""
         
-        emp = Map.GenerateEmptiesMap(snk , self , GX , GY ) # getting all the empty spaces
-        #just to make sure the apple doesn't spawn in the same place or in teh Snake's body
+        emp = Map.GenerateEmptiesMap(snk , self , GX , GY ) # Obtener todos los espacios vacíos
+        #sus para asegurarse de que la manzana no se reptee en el mismo lugar o en el cuerpo de la serpiente
 
         if len(emp) > 0 :
-            self.Pos = random.choice(emp) #Randomizing the postion of teh apple
+            self.Pos = random.choice(emp) #Aleatorizando la posición de la manzana
 
     def Draw(self):
 
-        """Draws the Apple on the Screen"""
+        """Dibuja la Manzana en el Pantalla"""
 
-        left = self.Pos[0] * Grid_Size
-        top = self.Pos[1] * Grid_Size
+        left = self.Pos[0] * Grid_Tam
+        top = self.Pos[1] * Grid_Tam
 
-        pygame.draw.rect(self.scr , Apple_CLR , pygame.Rect( left , top , Grid_Size , Grid_Size ) ,border_radius=8)
+        pygame.draw.rect(self.scr , Manzana_CLR , pygame.Rect( left , top , Grid_Tam , Grid_Tam ) ,border_radius=8)
 
-def MovePoint(Point : tuple[int,int] , Dir : tuple[int, int] , reverse = False) : 
+def Mover(Point : tuple[int,int] , Dir : tuple[int, int] , reverse = False) : 
     return ((Point[0] - Dir[0] , Point[1] + Dir[1]) if reverse else (Point[0] + Dir[0] , Point[1] - Dir[1]))
 
-def IsAPossibleDir (snk : Snake,Dir : tuple , reverse = False) : 
+def PosibleDir (snk : Snake,Dir : tuple , reverse = False) : 
     
-    # Tests if a Direction is Safe to Follow
+    # Pruebas si una dirección es segura para seguir
     
     head = snk.Pos[0]
     
-    head = MovePoint(head,Dir,reverse)
+    head = Mover(head,Dir,reverse)
     
     return (not head in snk.Pos) and Map.InsideBorders(head[0],head[1],GX,GY)
 
-def CanContinueHamiltonianCycle(snk : Snake , HamiltonianCycle : list, Gx : int = GX , Gy : int = GY) : 
+def PuedeContinuarHamiltonianCirculo(snk : Snake , HamiltonianCirculo : list, Gx : int = GX , Gy : int = GY) : 
     test1 = True
     test2 = True
     
@@ -211,146 +211,146 @@ def CanContinueHamiltonianCycle(snk : Snake , HamiltonianCycle : list, Gx : int 
     Mp = [None] * Len
     
     for i in range(l) : 
-        piece = snk.Pos[l - i - 1] # a piece of the snake body at a specific index
-        index = piece[1] * Gx + piece[0] # the index of the piece
+        pieza = snk.Pos[l - i - 1] # un pedazo del cuerpo de serpiente en un índice específico
+        index = pieza[1] * Gx + pieza[0] # el índice de la pieza
         Mp[index] = i + 1   
     
-    s = (HamiltonianCycle.index(snk.Pos[0]) + 1) % (len(HamiltonianCycle) - 1) # the tail index when the snake follows the HamiltonianCycle
+    s = (HamiltonianCirculo.index(snk.Pos[0]) + 1) % (len(HamiltonianCirculo) - 1) # el índice de cola cuando la serpiente sigue el HamiltonianCirculo
     saveds = s
-    e = (s + l - 1) % (len(HamiltonianCycle) - 1) # the head index when the snake follows the HamiltonianCycle
+    e = (s + l - 1) % (len(HamiltonianCirculo) - 1) # El índice de la cabeza cuando la serpiente sigue al Hamiltoniancircolo
     
     i = 1
     
-    while s != e :# tests the HamiltonianCycle in it's Normal Direction
-        piece = HamiltonianCycle[s]
-        index = piece[1] * Gx + piece[0]
+    while s != e :# Prueba el Hamiltoniancirculo en su dirección normal
+        pieza = HamiltonianCirculo[s]
+        index = pieza[1] * Gx + pieza[0]
         if Mp[index] != None and i <= Mp[index] : 
             test1 = False
             break
-        s = (s+1) % (len(HamiltonianCycle) - 1)
+        s = (s+1) % (len(HamiltonianCirculo) - 1)
         i += 1
 
     if not test1 :
         reversehc = True
         
-        s = (saveds - 1) % (len(HamiltonianCycle) - 1)
-        s = s if s > 0 else len(HamiltonianCycle) - 1 + s
-        e = (s - l + 1) % (len(HamiltonianCycle) - 1)
-        e = e if e > 0 else len(HamiltonianCycle) - 1 + e
+        s = (saveds - 1) % (len(HamiltonianCirculo) - 1)
+        s = s if s > 0 else len(HamiltonianCirculo) - 1 + s
+        e = (s - l + 1) % (len(HamiltonianCirculo) - 1)
+        e = e if e > 0 else len(HamiltonianCirculo) - 1 + e
         
         i = 0
         
-        while e != s :# tests the HamiltonianCycle in it's Reversed Direction
-            piece = HamiltonianCycle[e]
-            index = piece[1] * Gx + piece[0]
+        while e != s :# prueba el HamiltonianCirculo en su dirección invertida
+            pieza = HamiltonianCirculo[e]
+            index = pieza[1] * Gx + pieza[0]
             if Mp[index] != None and l - i <= Mp[index] : 
                 test2 = False
                 break
-            e = (e+1) % (len(HamiltonianCycle) - 1)
+            e = (e+1) % (len(HamiltonianCirculo) - 1)
             i += 1
     
     return test1 or test2 , reversehc
 
-def IsAPossiblePath(path : list , snk : Snake , apl : Apple , HamiltonianCycle : list):
+def EsUnPosibleCmaino(path : list , snk : Snake , apl : Manzana , HamiltonianCirculo : list):
     
-    RPOS = snk.Pos.copy() # The Snake's old Positions before movement
+    RPOS = snk.Pos.copy() # Las viejas posiciones de la serpiente antes del movimiento
 
-    RDir = snk.Direction # The Snake's old direction before movement
+    RDir = snk.Direccion # La vieja dirección de la serpiente antes del movimiento
     
     for j in range(len(path)) :
-        snk.Change_Direction(path[j])
+        snk.Change_Direccion(path[j])
         snk.Move()
 
     apl.Can_Eat(snk,False)
     
-    test , reversehc = CanContinueHamiltonianCycle(snk,HamiltonianCycle)
+    test , reversehc = PuedeContinuarHamiltonianCirculo(snk,HamiltonianCirculo)
     
     snk.Pos = RPOS
-    snk.Direction = RDir
+    snk.Direccion = RDir
     snk.Length = len(RPOS)
     return test , reversehc
 
-def ChooseBestSkip(snk : Snake , HamiltonianCycle : list) :
+def MejorDir(snk : Snake , HamiltonianCirculo : list) :
     head = snk.Pos[0]
     
-    hi = HamiltonianCycle.index(head)
+    hi = HamiltonianCirculo.index(head)
     
-    l = len(HamiltonianCycle)
+    l = len(HamiltonianCirculo)
     
     BestDir = None
     
     less = False
     
     for dir in ALL_DIR :
-        if IsAPossibleDir(snk , dir) :
-            Nhead = MovePoint(head,dir)# new head position following that direction
-            if  HamiltonianCycle.index(Nhead) + (l if dir == snk.Direction else 0) > hi: 
+        if PosibleDir(snk , dir) :
+            Nhead = Mover(head,dir)# nueva posición de la cabeza después de esa dirección
+            if  HamiltonianCirculo.index(Nhead) + (l if dir == snk.Direccion else 0) > hi: 
                 less = False
                 BestDir = dir
-                hi = HamiltonianCycle.index(Nhead) + (l if dir == snk.Direction else 0)
-            elif (BestDir == None or less == True) and dir == snk.Direction :
+                hi = HamiltonianCirculo.index(Nhead) + (l if dir == snk.Direccion else 0)
+            elif (BestDir == None or less == True) and dir == snk.Direccion :
                 less = False
                 BestDir = dir
-                hi = HamiltonianCycle.index(Nhead)
+                hi = HamiltonianCirculo.index(Nhead)
             elif BestDir == None :
                 less = True
                 BestDir = dir
-                hi = HamiltonianCycle.index(Nhead)
+                hi = HamiltonianCirculo.index(Nhead)
     
     return BestDir
 
-def MapTour (snk : Snake, apl : Apple, HamiltonianCycle : list , HamiltonianPath : list , limit : int , ForbiddenPos : list) : 
+def MapTour (snk : Snake, apl : Manzana, HamiltonianCirculo : list , HamiltonianPath : list , limit : int , ForbiddenPos : list) : 
     
     l = 0
     path = []
     TailPath = []
     
     RPos = snk.Pos.copy()
-    RDir = snk.Direction
+    RDir = snk.Direccion
     
     reversehc = False
     
-    AteTheApple = False # represents if the snake ate an apple while Taking the tour or not
-    StepsAfterLunch = 0 # the number of steps the snake took after eating an apple
+    ComeManzana = False # representa si la serpiente comió una manzana mientras realiza la gira o no
+    PasosDespuesDeComer = 0 # la cantidad de pasos que tomó la serpiente después de comer una manzana
     
     while l < limit :
-        dir = ChooseBestSkip(snk,HamiltonianCycle)
-        if snk.Pos[0] in ForbiddenPos :# used to remove loops
+        dir = MejorDir(snk,HamiltonianCirculo)
+        if snk.Pos[0] in ForbiddenPos :# Se usa para eliminar bucles
             snk.Pos = RPos
-            snk.Direction = RDir
+            snk.Direccion = RDir
             snk.Length = len(RPos)
             return [] , reversehc
         if dir != None :
             path.append(dir) 
-            snk.Change_Direction(dir)
+            snk.Change_Direccion(dir)
             snk.Move()
-            TailPath.append(snk.LastTailDir)
-            if AteTheApple :
-                StepsAfterLunch += 1
-            if snk.Pos[0] == apl.Pos and not AteTheApple : 
+            TailPath.append(snk.ColaDir)
+            if ComeManzana :
+                PasosDespuesDeComer += 1
+            if snk.Pos[0] == apl.Pos and not ComeManzana : 
                 snk.Append()
-                AteTheApple = True
+                ComeManzana = True
         else :
             break
         l += 1
     while len(path) > 0 :
-        if AteTheApple and StepsAfterLunch > 0 :
-            StepsAfterLunch -= 1
-        elif AteTheApple :
+        if ComeManzana and PasosDespuesDeComer > 0 :
+            PasosDespuesDeComer -= 1
+        elif ComeManzana :
             snk.Pos.pop()
             snk.Length = len(snk.Pos)
-            AteTheApple = False
-        c , reversehc = CanContinueHamiltonianCycle(snk,HamiltonianCycle)
+            ComeManzana = False
+        c , reversehc = PuedeContinuarHamiltonianCirculo(snk,HamiltonianCirculo)
         if c :      
             break
         dir = TailPath.pop()
         snk.Pos.reverse()
-        snk.Change_Direction(dir)
+        snk.Change_Direccion(dir)
         snk.Move(True,True)
         path.pop()
         snk.Pos.reverse()
     snk.Pos = RPos
-    snk.Direction = RDir
+    snk.Direccion = RDir
     snk.Length = len(RPos)
     
     return path , reversehc
@@ -358,23 +358,23 @@ def MapTour (snk : Snake, apl : Apple, HamiltonianCycle : list , HamiltonianPath
 def ShowScore(scr , Color = TXT_CLR) :
     global score
     
-    font = pgm.font.SysFont("Verdana", 15, True)# font for displaying score
+    font = pgm.font.SysFont("Verdana", 15, True)# font para mostrar puntaje
     scoretxt = font.render(str(score),False,Color)
-    scr.blit(scoretxt,(0,0)) # showing the score
+    scr.blit(scoretxt,(0,0)) # Mostrando el puntaje
 
-Win = False
+Gana = False
 
-def Start () :
+def Inicio () :
     global score
     score = 1
 
     pgm.init()
 
     global scr
-    scr = pgm.display.set_mode(size) # the main game surface
+    scr = pgm.display.set_mode(tamaño) # la superficie del juego principal
 
-    global Win
-    Win = False # represents if the snake won the Game or Not
+    global Gana
+    Gana = False # representa si la serpiente ganó el juego o no
 
     C = pygame.time.Clock()
     
@@ -382,15 +382,15 @@ def Start () :
     snk = Snake(Body_Padding=1)
 
     global apl
-    apl = Apple(scr , snk)
+    apl = Manzana(scr , snk)
 
-    FollowPath = False # specifies that the Snake will follow another path rather than following the hamiltonian cycle
+    FollowPath = False # Especifica que la serpiente seguirá otro camino en lugar de seguir el ciclo hamiltoniano
     
-    path = [] # a path that breaks the hamiltonian cycle and skips some steps
+    path = [] # un camino que rompe el ciclo hamiltoniano y omite algunos pasos
 
-    Mp = Map.GenerateMap(GX // 2 , GY // 2) #Generating a Map of half the length and the width
+    Mp = Map.GenerateMap(GX // 2 , GY // 2) #Generando un mapa de la mitad de la longitud y el ancho
 
-    G = Map.GenerateMapGraph(Mp)# Converting that Map into a Graph
+    G = Map.GenerateMapGraph(Mp)# Convertir ese mapa en un gráfico
 
     G = Map.PrimsAlgorithm(G,0)
 
@@ -399,47 +399,47 @@ def Start () :
     HPos , HPath = Map.Maze2Cycle(Maze , GX , GY)
     
     global ReverseCycle
-    ReverseCycle = False # represents that we will reverse the hamiltonian cycle direction
+    ReverseCycle = False # representa que revertiremos la dirección del ciclo hamiltoniano
     
     r = False 
     
-    MoveIndex = HPos.index(snk.Pos[0]) # the step index in the Hamiltonian Cycle path
+    MoveIndex = HPos.index(snk.Pos[0]) # El índice de paso en la ruta del ciclo de Hamiltonia
     
-    LoopDetector = [] # used to detect looping points
-    ForbiddenPos = [] # used to break the loops
+    LoopDetector = [] # utilizado para detectar puntos de bucle
+    ForbiddenPos = [] # uusado para romper loops
     
-    SkippingPath = [] # the path used to skip the hamiltonian Cycle 
-    skip = True # the snake will only follow the HamiltonianCycle if skip is False
+    SkippingPath = [] # El camino utilizado para omitir el ciclo hamiltoniano
+    skip = True # La serpiente solo seguirá al Hamiltoniancirco si Skip es falso
     
     while True :
-        scr.fill(BCKG_Color) # filling the whole screen so we reset it
+        scr.fill(BCKG_Color) # llenando toda la pantalla para que la reiniciamos
         
-        C.tick(70) # fixes the frame rate of the Game
+        C.tick(70) #corrige la velocidad de cuadro del juego
         
         try :
-            if not FollowPath : # trys to find a path to the apple
+            if not FollowPath : # trys para encontrar un camino hacia la manzana
                 Mp = Map.GenerateEmptiesMap(snk,apl,GX,GY , ExceptHead = True , Exceptapl = True)
                 path = Map.AStarPathFinding(Mp,Mp.index(snk.Pos[0]),Mp.index(apl.Pos),LEN//6)
-        except : # no such path exists
+        except : # No existe tal camino
             path = None
 
         if path != None and not FollowPath and skip :
-            c , r = IsAPossiblePath(path,snk,apl,HPos) # tests if the path is safe
-            if c : # the path is safe
+            c , r = EsUnPosibleCmaino(path,snk,apl,HPos) # Prueba si la ruta es segura
+            if c : # El camino es seguro
                 FollowPath = True
                 SkippingPath = []
                 ReverseCycle = r
                 LoopDetector = []
                 ForbiddenPos = []
-            else : # the path is not safe
+            else : # El camino no es seguro
                 r = None
         if not FollowPath :
-            skipdir = None # the current direction in the tour
+            skipdir = None # la dirección actual en la gira
             
             if len(SkippingPath) == 0 and skip :
                 if snk.Pos[0] in LoopDetector :
                     ForbiddenPos.append(snk.Pos[0])
-                SkippingPath , r= MapTour(snk,apl,HPos,HPath,(GX+GY) * 2 , ForbiddenPos) # trys to find a tour path around the map
+                SkippingPath , r= MapTour(snk,apl,HPos,HPath,(GX+GY) * 2 , ForbiddenPos) # intenta encontrar un camino de gira alrededor del mapa
                 if len(SkippingPath) > 0:
                     LoopDetector.append(snk.Pos[0])
             if len(SkippingPath) > 0 :
@@ -448,42 +448,42 @@ def Start () :
                 skipdir = SkippingPath.pop(0)
             
             if skipdir != None :
-                snk.Change_Direction(skipdir)
+                snk.Change_Direccion(skipdir)
                 snk.Move()
                 if snk.Pos[0] in LoopDetector :
                     ForbiddenPos.append(snk.Pos[0])
             else :
                 if ReverseCycle :
-                    snk.Change_Direction(HPath[MoveIndex-1])
+                    snk.Change_Direccion(HPath[MoveIndex-1])
                 else :
-                    snk.Change_Direction(HPath[MoveIndex])
+                    snk.Change_Direccion(HPath[MoveIndex])
                 snk.Move(ReverseCycle)        
-            MoveIndex = HPos.index(snk.Pos[0])# going to the next step in the path
+            MoveIndex = HPos.index(snk.Pos[0])# Ir al siguiente paso en el camino
             
-        if FollowPath : # the snake is following a path to the apple
-            snk.Change_Direction(path.pop(0))
+        if FollowPath : # la serpiente está siguiendo un camino hacia la manzana
+            snk.Change_Direccion(path.pop(0))
             snk.Move()
-        if FollowPath and len(path) == 0 : # got to the end of the path
+        if FollowPath and len(path) == 0 : # Llegué al final del camino
             FollowPath = False
             MoveIndex = HPos.index(snk.Pos[0])
         
-        snk.Draw(scr) # drawing the Snake on the screen
+        snk.Draw(scr) # Dibujar la serpiente en la pantalla
         
-        apl.Can_Eat(snk)# Appends the Snake if he ate the apple and respawn it
+        apl.Can_Eat(snk)# Agrega la serpiente si se comió la manzana y la reapareció
         
         if len(snk) >= (LEN /100) * 65 and skip :
             skip = False
         
         score = len(snk)
-        ShowScore(scr) # shows the score
+        ShowScore(scr) # muestra la partitura
         
-        if len(snk) == LEN : # he won the Game
-            Win = True 
+        if len(snk) == LEN : # Ganó el juego
+            Gana = True 
             break
         else :
-            apl.Draw() # Drawing the apple on the screen
+            apl.Draw() # Dibujando la manzana en la pantalla
 
-        if snk.see_if_dead() : # sees if snake is in a death position
+        if snk.ver_si_dead() : # ve si la serpiente está en una posición de muerte
             break
         
         pgm.display.flip()
@@ -499,7 +499,7 @@ def Game_Over() :
     font = pgm.font.SysFont("Verdana" , 30 , True)
     text = font.render("GameOver . . ." , False , TXT_CLR)
     
-    TW = text.get_width() #text width
+    TW = text.get_width() #ancho de text
 
     global scr
 
@@ -508,7 +508,7 @@ def Game_Over() :
     
     scr.blit(text , ( (w - TW) // 2 ,0))
 
-    ShowScore(scr) # shows the score
+    ShowScore(scr) # muestra la partitura
 
     pgm.display.flip()
 
@@ -524,16 +524,16 @@ def Game_Over() :
                 sys.exit()
             if ev.type == pgm.KEYDOWN and ev.key == pgm.K_r :
                 pgm.quit()
-                loop = False # breaks to repeat the games loop ( see the last 3 lines )
+                loop = False # Breaks para repetir el bucle de juegos (ver las últimas 3 líneas)
                 break
 
-def Game_Win() :
+def Game_Gana() :
     clock = pgm.time.Clock()
 
     font = pgm.font.SysFont("Verdana" , 30 , True)
-    text = font.render("You Win ! . ." , False , TXT_CLR)
+    text = font.render("You Gana ! . ." , False , TXT_CLR)
 
-    TW = text.get_width() #text width
+    TW = text.get_width() #ancho de texto
     TH = text.get_height()
 
     global scr
@@ -541,9 +541,9 @@ def Game_Win() :
     global snk
     snk.Draw(scr)
     
-    scr.blit(text , ( (w - TW) // 2 , (h -  TH) // 2)) #draws the winning text
+    scr.blit(text , ( (w - TW) // 2 , (h -  TH) // 2)) #draws el texto ganador
     
-    ShowScore(scr) # shows the score
+    ShowScore(scr) # muestra la partitura
     
     pgm.display.flip()
 
@@ -558,12 +558,12 @@ def Game_Win() :
                 sys.exit()
             if ev.type == pgm.KEYDOWN and ev.key == pgm.K_r :
                 pgm.quit()
-                loop = False # breaks to repeat the games loop ( see the last 3 lines )
+                loop = False # se rompe para repetir el bucle de juegos (ver las últimas 3 líneas)
                 break
 
 while True :
-    Start() # Starts the Game
-    if not Win :
-        Game_Over() # if we get here that means A GameOver has happened
+    Inicio() # Inicios el juego
+    if not Gana :
+        Game_Over() #Si llegamos aquí, eso significa que ha sucedido un GameOver
     else :
-        Game_Win() # if we get here that means the Ai has Won the Game
+        Game_Gana() # Si llegamos aquí, eso significa que la IA ha ganado el juego

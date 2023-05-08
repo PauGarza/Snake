@@ -19,12 +19,14 @@ LEN = GX * GY # la longitud del mapa (número de posiciones posibles)
 
 #    Colores principales:
 
-BCKG_Color = (69, 76, 87)
+BCKG_Color = (106, 128, 87)   # Verde pasto
+Manzana_CLR = (255, 51, 51)  # Rojo claro
+SNK_CLR = (200, 200, 200)    # Gris claro
+TXT_CLR = (255, 255, 255)    # Blanco
 
-Manzana_CLR = (255,0,0)
-SNK_CLR = (190,190,190)
 
-TXT_CLR = (4, 196, 39)
+# Carga la imagen de fondo
+background = pygame.image.load("background.png")
 
 #    Instrucciones de serpiente:
 
@@ -357,12 +359,15 @@ def MapTour (snk : Snake, apl : Manzana, HamiltonianCirculo : list , Hamiltonian
     
     return path , reversehc
 
-def ShowScore(scr , Color = TXT_CLR) :
+def ShowScore(scr, Color=TXT_CLR):
     global score
     
-    font = pgm.font.SysFont("Verdana", 15, True)# font para mostrar puntaje
-    scoretxt = font.render(str(score),False,Color)
-    scr.blit(scoretxt,(0,0)) # Mostrando el puntaje
+    font = pygame.font.SysFont("Verdana", 25, bold=True)  # define la fuente y el tamaño
+    score_text = font.render(f"Score: {score}", True, Color)  # crea el texto con el puntaje
+    score_rect = score_text.get_rect()  # obtiene el rectángulo del texto
+    score_rect.topleft = (10, 10)  # posiciona el texto en la esquina superior izquierda
+    scr.blit(score_text, score_rect)  # dibuja el texto en la pantalla
+
 
 Gana = False
 
@@ -374,7 +379,12 @@ def Inicio () :
 
     global scr
     scr = pgm.display.set_mode(tamaño) # la superficie del juego principal
+    # Configura el título de la ventana
+    pygame.display.set_caption("Snake")
 
+    # Carga la imagen de fondo
+    fondo = pygame.image.load("background.png")
+    
     global Gana
     Gana = False # representa si la serpiente ganó el juego o no
 
@@ -415,6 +425,8 @@ def Inicio () :
     
     while True :
         scr.fill(BCKG_Color) # llenando toda la pantalla para que la reiniciamos
+        # Dibuja la imagen de fondo
+        scr.blit(fondo, (0, 0))
         
         C.tick(70) #corrige la velocidad de cuadro del juego
         
@@ -499,7 +511,7 @@ def Game_Over() :
     clock = pgm.time.Clock()
 
     font = pgm.font.SysFont("Verdana" , 30 , True)
-    text = font.render("GameOver . . ." , False , TXT_CLR)
+    text = font.render("Perdiste . . ." , False , TXT_CLR)
     
     TW = text.get_width() #ancho de text
 
@@ -533,7 +545,7 @@ def Game_Gana() :
     clock = pgm.time.Clock()
 
     font = pgm.font.SysFont("Verdana" , 30 , True)
-    text = font.render("You Gana ! . ." , False , TXT_CLR)
+    text = font.render("¡GANASTE!" , False , TXT_CLR)
 
     TW = text.get_width() #ancho de texto
     TH = text.get_height()

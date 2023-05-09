@@ -10,6 +10,8 @@ HORZ = [RIGHT, LEFT]  # Direcciones horizontales
 VER = [UP, DOWN]  # Direcciones verticales
 
 # Clase que representa un nodo en un grafo utilizado en el proyecto
+
+
 class Node:
     # Lista de direcciones que no se pueden alcanzar
     BlockingDireccions = []
@@ -25,8 +27,9 @@ class Node:
         # Inicializa una lista vacía en "BlockingDireccions"
         self.BlockingDireccions = []
 
-
 # Función que calcula la distancia simple entre dos puntos
+
+
 def CalculateSimpleDistance(P1: tuple[int, int], P2: tuple[int, int]):
     # Calcula la diferencia en el eje X y Y entre los dos puntos y los suma para obtener la distancia simple
     return abs(P1[0] - P2[0]) + abs(P1[1] - P2[1])

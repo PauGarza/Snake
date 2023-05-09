@@ -1,17 +1,13 @@
 import random
 
 # Direcciones:
-
 UP = (0, 1)
 DOWN = (0, -1)
 RIGHT = (1, 0)
 LEFT = (-1, 0)
-
 ALL_DIR = (UP, DOWN, RIGHT, LEFT)
-
 HORZ = [RIGHT, LEFT]  # Direcciones horizontales
 VER = [UP, DOWN]  # Direcciones verticales
-
 
 # Clase que representa un nodo en un grafo utilizado en el proyecto
 class Node:
